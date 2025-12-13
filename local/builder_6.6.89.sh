@@ -192,6 +192,10 @@ if [[ "$KSU_BRANCH" == [yY] && "$APPLY_SUSFS" == [yY] ]]; then
   cd ./common
   patch -p1 < 50_add_susfs_in_gki-android15-6.6.patch || true
   patch -p1 -F 3 < 69_hide_stuff.patch || true
+  echo ">>> 应用 hymofs 补丁..."
+  wget https://raw.githubusercontent.com/Anatdx/HymoFS/refs/heads/main/patch/dirtyhymofs.patch
+  patch -p1 -F 3 < dirtyhymofs.patch
+  echo "CONFIG_HYMOFS=y" >> ./common/arch/arm64/configs/gki_defconfig # Write to defconfig
 elif [[ "$KSU_BRANCH" == [nN] && "$APPLY_SUSFS" == [yY] ]]; then
   git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android15-6.6
   #由于KernelSU Next尚未更新并适配susfs 2.0.0，故回退至susfs 1.5.12
